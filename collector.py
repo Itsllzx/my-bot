@@ -8,7 +8,9 @@ SOURCES = [
     "https://raw.githubusercontent.com/Iranian-V2Ray/V2Ray-Configs/main/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/Mahdi0024/ProxyMaster/master/Text_Sub.txt",
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
-    "https://raw.githubusercontent.com/vfarid/v2ray-share/main/all.txt"
+    "https://raw.githubusercontent.com/vfarid/v2ray-share/main/all.txt",
+    "https://github.com/barry-far/V2ray-Config/blob/main/All_Configs_Sub.txt",
+    "https://https://github.com/Epodonios/v2ray-configs/blob/main/All_Configs_Sub.txt"
   
 ]
 
