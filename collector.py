@@ -48,5 +48,5 @@ def main():
     with open("assets/data/content.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(selected_configs))
 
-if name == "main":
+if __name__ == "__main__":
     main()
