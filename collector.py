@@ -1,51 +1,33 @@
 import requests
-import base64
-import random
 import re
 
-# لیست منابع اصلاح شده (لینک‌های Raw برای خواندن مستقیم کد)
+# سورس‌های معتبر و تازه
 SOURCES = [
-    "https://raw.githubusercontent.com/Iranian-V2Ray/V2Ray-Configs/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/Mahdi0024/ProxyMaster/master/Text_Sub.txt",
-    "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
-    "https://raw.githubusercontent.com/vfarid/v2ray-share/main/all.txt",
-    "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt"
+    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/protocols/vless",
+    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/protocols/vmess",
+    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/protocols/trojan",
+    "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/All_Configs_Sub.txt"
 ]
 
-def get_configs():
-    all_configs = set()
+def main():
+    all_configs = []
     for url in SOURCES:
         try:
-            response = requests.get(url, timeout=10)
-            if response.status_code == 200:
-                content = response.text
-                # بررسی اینکه آیا محتوا نیاز به Decode دارد یا خیر
-                if "vmess://" not in content and "vless://" not in content:
-                    try:
-                        content = base64.b64decode(content).decode('utf-8')
-                    except: pass
-                
-                # استخراج تمام لینک‌های معتبر
-                found = re.findall(r'(vless|vmess|trojan|ss|ssr)://[^\s]+', content)
-                for c in found:
-                    all_configs.add(c)
-        except: continue
-    return list(all_configs)
-
-def main():
-    configs = get_configs()
-    # حذف موارد خراب و فیلتر کردن طول
-    valid_configs = [c for c in configs if len(c) > 20]
+            res = requests.get(url, timeout=10)
+            if res.status_code == 200:
+                # استخراج لینک‌ها با استفاده از Regex
+                configs = re.findall(r'(vless|vmess|trojan|ss)://[^\s]+', res.text)
+                all_configs.extend(configs)
+        except:
+            continue
     
-    # انتخاب ۱۰۰ کانفیگ تصادفی از کل منابع
-    if len(valid_configs) > 100:
-        selected_configs = random.sample(valid_configs, 100)
-    else:
-        selected_configs = valid_configs
-        
+    # فقط ۵۰ تا از بهترین‌ها را نگه دار
+    final_configs = list(set(all_configs))[:50]
+    
+    # ذخیره در فایل
     with open("assets/data/content.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(selected_configs))
+        f.write("\n".join(final_configs))
+    print(f"Successfully saved {len(final_configs)} configs.")
 
 if __name__ == "__main__":
     main()
